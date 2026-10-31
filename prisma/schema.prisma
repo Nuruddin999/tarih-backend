@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Era {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String?
+  sortOrder   Int      @default(0)
+  people      Person[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Person {
+  id             String      @id @default(cuid())
+  slug           String      @unique
+  name           String
+  honorific      String?
+  description    String?
+  birthHijri     String?
+  birthGregorian String?
+  deathHijri     String?
+  deathGregorian String?
+  dateNote       String?
+  cities         String[]    @default([])
+  eras           Era[]
+  specialties    Specialty[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Specialty {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  people    Person[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
