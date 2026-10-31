@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Madhhab {
+  hanafi
+  maliki
+  shafii
+  hanbali
+}
+
 model Era {
   id          String   @id @default(cuid())
   slug        String   @unique
@@ -30,10 +37,22 @@ model Person {
   deathGregorian String?
   dateNote       String?
   cities         String[]    @default([])
+  madhhabs       Madhhab[]   @default([])
+  sources        PersonSource[]
   eras           Era[]
   specialties    Specialty[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+}
+
+model PersonSource {
+  id       String @id @default(cuid())
+  title    String
+  url      String
+  personId String
+  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@index([personId])
 }
 
 model Specialty {
@@ -44,3 +63,4 @@ model Specialty {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+

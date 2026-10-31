@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { AppController } from './app.controller';
+import { PeopleModule } from './people/people.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true, validate: env => {
@@ -9,7 +10,8 @@ import { AppController } from './app.controller';
     const port = Number(env.PORT ?? 3001);
     if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid PORT');
     return { ...env, PORT: port };
-  } }), PrismaModule],
+  } }), PrismaModule, PeopleModule],
   controllers: [AppController],
 })
 export class AppModule {}
+
